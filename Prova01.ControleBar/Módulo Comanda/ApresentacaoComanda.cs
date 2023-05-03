@@ -23,7 +23,7 @@ namespace Prova01.ControleBar.Módulo_Comanda
 
           public ApresentacaoComanda(RepositorioComanda repositorioComanda, RepositorioProduto repositorioProduto, ApresentacaoProduto apresentacaoProduto, RepositorioGarçom repositorioGarçom, ApresentacaoGarçom apresentacaoGarçom, RepositorioMesa repositorioMesa, ApresentacaoMesa apresentacaoMesa)
           {
-               nomeEntidade = "Comanda";
+               nomeEntidade = "Conta";
                sufixo = "s";
                this.repositorioComanda = repositorioComanda;
                this.repositorioProduto = repositorioProduto;
@@ -39,11 +39,11 @@ namespace Prova01.ControleBar.Módulo_Comanda
           {
                Console.BackgroundColor = ConsoleColor.Blue;
                Console.ForegroundColor = ConsoleColor.White;
-               Console.WriteLine("| {0, -10} | {1, -20} | {2, -20} | {3, -20} |", "Id", "Descrição comanda", "Garçom", "Nº Mesa");
+               Console.WriteLine("| {0, -10} | {1, -20} | {2, -20} | {3, -20} | {4, -20} |", "Id", "Descrição comanda", "Garçom", "Nº Mesa", "Total a pagar");
                Console.ResetColor();
                foreach (NegocioComanda comanda in registros)
                {
-                    Console.WriteLine("| {0, -10} | {1, -20} | {2, -20} | {3, -20} |", comanda.id, comanda.DescricaoComanda, comanda.Garçom.Nome, comanda.Mesa.NumeroMesa);
+                    Console.WriteLine("| {0, -10} | {1, -20} | {2, -20} | {3, -20} | {4, -20} |", comanda.id, comanda.DescricaoComanda, comanda.Garçom.Nome, comanda.Mesa.NumeroMesa, comanda.Pagamento.ToString("F2"));
                }
           }
 
@@ -53,6 +53,7 @@ namespace Prova01.ControleBar.Módulo_Comanda
                string descricaoComanda = Console.ReadLine();
 
                NegocioMesa mesa = PegarMesa(repositorioMesa);
+
                NegocioGarçom garçom = PegarGarçom(repositorioGarçom);
 
                NegocioComanda comanda = new NegocioComanda(descricaoComanda, mesa, garçom);
@@ -90,15 +91,19 @@ namespace Prova01.ControleBar.Módulo_Comanda
                                    break;
 
                               case "2":
-                                   RegistrarPedidos(false);
+                                   RegistrarPedidos();
                                    break;
 
                               case "3":
-
+                                   new NotImplementedException();
                                    break;
 
                               case "4":
                                    VisualizarContasAbertas(true);
+                                   break;
+
+                              case "5":
+                                   new NotImplementedException();
                                    break;
 
                               default:
@@ -109,38 +114,41 @@ namespace Prova01.ControleBar.Módulo_Comanda
                }
           }
 
-          private bool RegistrarPedidos(bool mostrarCabecalho)
+          private void RegistrarPedidos()
           {
-               throw new NotImplementedException();
-               //bool visualizando = false;
+               Console.Clear();
+               ImprimirMensagem($"Cadastrando pedidos...\n", ConsoleColor.DarkGray, 'n');
 
-               //if (mostrarCabecalho)
-               //{
-               //     Console.Clear();
-               //     ImprimirMensagem($"Visualizando {nomeEntidade}{sufixo}...\n", ConsoleColor.DarkGray, 'n');
-               //     visualizando = true;
-               //}
+               ArrayList registros = repositorioBase.PegarLista();
 
-               //ArrayList registros = repositorioBase.PegarLista();
+               if (registros.Count == 0)
+               {
+                    ImprimirMensagem("\nNenhuma conta aberta!", ConsoleColor.DarkYellow, 's');
+                    return;
+               }
 
-               //if (registros.Count == 0)
-               //{
-               //     ImprimirMensagem("\nNenhum registro cadastrado!", ConsoleColor.DarkYellow, 's');
-               //     return false;
-               //}
+               MostrarContas(registros);
+               Console.WriteLine();
+               int id = EncontrarId();
+               NegocioComanda comanda = repositorioComanda.ProcurarId(id);
+               FazerPedidos(comanda);
+               ImprimirMensagem("\nPedido realizado com sucesso!", ConsoleColor.Green, 's');
+          }
 
-               //MostrarTabela(registros);
+          public void FazerPedidos(NegocioComanda comanda)
+          {
+               NegocioProduto produto = PegarProduto(repositorioProduto);
+               int quantidade = VerificarInt("\nEntre com uma quantidade:\n> ", "quantidade");
 
-               //if (visualizando)
-               //     Console.ReadLine();
-
-               //return true;
+               comanda.Produto = produto;
+               comanda.AcrescentarMontante(quantidade, produto);
+               return;
           }
 
           public void AbrirConta()
           {
                Console.Clear();
-               ImprimirMensagem($"Inserindo {nomeEntidade}...\n", ConsoleColor.DarkGray, 'n');
+               ImprimirMensagem($"Abrindo {nomeEntidade}...\n", ConsoleColor.DarkGray, 'n');
 
                EntidadeBase registro = ObterRegistro();
                ArrayList listaErros = registro.ValidarErros();
@@ -154,9 +162,10 @@ namespace Prova01.ControleBar.Módulo_Comanda
                     return;
                }
 
+
                repositorioBase.Inserir(registro);
 
-               ImprimirMensagem($"\n{nomeEntidade} inserida com sucesso!", ConsoleColor.Green, 's');
+               ImprimirMensagem($"\n{nomeEntidade} aberta com sucesso!", ConsoleColor.Green, 's');
           }
 
           public bool VisualizarContasAbertas(bool mostrarCabecalho)
@@ -174,7 +183,7 @@ namespace Prova01.ControleBar.Módulo_Comanda
 
                if (registros.Count == 0)
                {
-                    ImprimirMensagem("\nNenhum registro cadastrado!", ConsoleColor.DarkYellow, 's');
+                    ImprimirMensagem("\nNenhuma conta aberta!", ConsoleColor.DarkYellow, 's');
                     return false;
                }
 
@@ -187,8 +196,19 @@ namespace Prova01.ControleBar.Módulo_Comanda
           }
           private NegocioMesa PegarMesa(RepositorioMesa repositorioMesa)
           {
-               apresentacaoMesa.VisualizarRegistros(true);
-               int id = apresentacaoMesa.EncontrarId();
+               int id;
+               bool disponivel = true;
+               do
+               {
+                    apresentacaoMesa.VisualizarRegistros(true);
+                    id = apresentacaoMesa.EncontrarId();
+                    disponivel = apresentacaoMesa.VerificarDisponibilidade(id);
+
+                    if (!disponivel)
+                         ImprimirMensagem("\nEntre com uma mesa disponível!", ConsoleColor.Red, 's');
+
+               } while (!disponivel);
+
                NegocioMesa mesa = repositorioMesa.ProcurarId(id);
                mesa.disponivel = false;
                return mesa;

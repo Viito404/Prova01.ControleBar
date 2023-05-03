@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Schema;
 
 namespace Prova01.ControleBar.Módulo_Comanda
 {
@@ -18,6 +19,8 @@ namespace Prova01.ControleBar.Módulo_Comanda
           private NegocioMesa mesa;
           private NegocioProduto produto;
           private NegocioGarçom garçom;
+          private double pagamento = 0;
+          private double total = 0;
 
           public NegocioComanda(string descricaoComanda, NegocioMesa mesa,NegocioGarçom garçom)
           {
@@ -31,6 +34,10 @@ namespace Prova01.ControleBar.Módulo_Comanda
           public NegocioProduto Produto { get { return produto; } set { produto = value; } }
 
           public NegocioGarçom Garçom { get { return garçom; } set { garçom = value; } }
+
+          public double Pagamento { get { return pagamento; } set { pagamento = value; } }
+
+          public double Total { get { return total; } set { total = value; } }
 
           public override void AtualizarRegistros(EntidadeBase registroAtualizado)
           {
@@ -46,6 +53,11 @@ namespace Prova01.ControleBar.Módulo_Comanda
           {
                ArrayList listaErros = new ArrayList();
                return listaErros;
+          }
+
+          public void AcrescentarMontante(int quantidade, NegocioProduto produto)
+          {
+               pagamento += (quantidade * produto.PrecoProduto);               
           }
      }
 }
