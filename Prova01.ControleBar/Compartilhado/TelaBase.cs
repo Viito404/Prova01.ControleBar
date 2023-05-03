@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using Prova01.ControleBar.Módulo_Mesa;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,7 +12,8 @@ namespace Prova01.ControleBar.Compartilhado
      internal abstract class TelaBase
      {
           //Formatação para título e sufixo relacionado(s).
-          public string nomeEntidade, sufixo;
+          public string nomeEntidade, sufixo, pronome;
+
 
           //Passagem do repositorioBase para pegar seus métodos e atributos. 
           protected RepositorioBase repositorioBase = null;
@@ -47,15 +49,16 @@ namespace Prova01.ControleBar.Compartilhado
                if (listaErros.Count > 0)
                {
                     foreach (String entidade in listaErros)
-                         ImprimirMensagem(entidade, ConsoleColor.Red, 's');
+                         ImprimirMensagem(entidade, ConsoleColor.Red, 'n');
 
+                    Console.ReadLine();
                     InserirNovoRegistro();
                     return;
                }
 
                repositorioBase.Inserir(registro);
 
-               ImprimirMensagem($"\n{nomeEntidade} inserida com sucesso!", ConsoleColor.Green, 's');
+               ImprimirMensagem($"\n{nomeEntidade} inserid{pronome} com sucesso!", ConsoleColor.Green, 's');
           }
 
           public virtual bool VisualizarRegistros(bool mostrarCabecalho)
@@ -106,8 +109,9 @@ namespace Prova01.ControleBar.Compartilhado
                if (listaErros.Count > 0)
                {
                     foreach (String entidade in listaErros)
-                         ImprimirMensagem(entidade, ConsoleColor.Red, 's');
+                         ImprimirMensagem(entidade, ConsoleColor.Red, 'n');
 
+                    Console.ReadLine();
                     EditarRegistro();
                     return;
                }
@@ -128,7 +132,7 @@ namespace Prova01.ControleBar.Compartilhado
                     return;
 
                Console.WriteLine();
-               int id = EncontrarId();
+               int id = EncontrarId();             
 
                repositorioBase.Deletar(id);
 
@@ -209,6 +213,73 @@ namespace Prova01.ControleBar.Compartilhado
                     } while (saida > 0);
                }
           }
+
+          public virtual string VerificarString(string mensagem, string campo)
+          {
+               string value = null;
+
+               do
+               {
+                    ImprimirMensagem(mensagem, ConsoleColor.White, 'n');
+                    value = Console.ReadLine();
+
+                    if (string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value))
+                    {
+                         ImprimirMensagem($"Campo '{campo}' obrigatório!", ConsoleColor.Red, 'n');
+                         Console.ReadLine();
+                    }
+
+               } while (string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value));
+
+               return value;
+          }
+
+          public virtual double VerificarDouble(string mensagem, string campo)
+          {
+               double value = 0;
+               bool numeroInvalido = false;
+
+               do
+               {
+                    numeroInvalido = false;
+                    try
+                    {
+                         ImprimirMensagem(mensagem, ConsoleColor.White, 'n');
+                         value = Convert.ToDouble(Console.ReadLine());
+                    }
+                    catch (FormatException)
+                    {
+                         ImprimirMensagem($"\nCampo '{campo}' tem um formato inválido!", ConsoleColor.Red, 'n');
+                         Console.ReadLine();
+                         numeroInvalido = true;
+                    }
+
+               } while (numeroInvalido);
+               return value;
+          }
+
+          public virtual int VerificarInt(string mensagem, string campo)
+          {
+               int value = 0;
+               bool numeroInvalido = false;
+
+               do
+               {
+                    numeroInvalido = false;
+                    try
+                    {
+                         ImprimirMensagem(mensagem, ConsoleColor.White, 'n');
+                         value = Convert.ToInt32(Console.ReadLine());
+                    }
+                    catch (FormatException)
+                    {
+                         ImprimirMensagem($"\nCampo '{campo}' tem um formato inválido!", ConsoleColor.Red, 'n');
+                         Console.ReadLine();
+                         numeroInvalido = true;
+                    }
+               } while (numeroInvalido);
+               return value;
+          }      
      }
 }
 

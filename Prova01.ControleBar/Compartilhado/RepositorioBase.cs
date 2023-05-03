@@ -12,6 +12,8 @@ namespace Prova01.ControleBar.Compartilhado
           //ArrayList responsável por armazenar toda a informação dos repositórios dos elementos.
           protected ArrayList dados;
 
+          public ArrayList Dados { get { return dados; } set { dados = value; } }
+
           //Contador de id para todo novo elemento cadastrado.
           protected int contadorId = 0;
 

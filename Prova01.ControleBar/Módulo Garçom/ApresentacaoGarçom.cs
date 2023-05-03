@@ -14,6 +14,7 @@ namespace Prova01.ControleBar.Módulo_Garçom
           RepositorioGarçom repositorioGarçom;
           public ApresentacaoGarçom(RepositorioGarçom repositorioGarçom)
           {
+               pronome = "o";
                nomeEntidade = "Garçom";
                this.repositorioGarçom = repositorioGarçom;
                repositorioBase = repositorioGarçom;
@@ -23,28 +24,55 @@ namespace Prova01.ControleBar.Módulo_Garçom
           {
                Console.BackgroundColor = ConsoleColor.Blue;
                Console.ForegroundColor = ConsoleColor.White;
-               Console.WriteLine("| {0, -10} | {1, -20} | {2, -20} | {3, -20} |", "Id", "Nome", "Cpf", "Telefone");
+               Console.WriteLine("| {0, -10} | {1, -20} | {2, -20} | {3, -20} |", "Id", "NOME", "CPF", "TELEFONE");
                Console.ResetColor();
                foreach (NegocioGarçom garçom in registros)
                {
-                    Console.WriteLine("| {0, -10} | {1, -20} | {2, -20} | {3, -20} |", garçom.id, garçom.Nome, garçom.Cpf, garçom.Telefone);
+                    Console.WriteLine("| {0, -10} | {1, -20} | {2, -20} | {3, -20} |", garçom.id, garçom.Nome.ToUpper(), garçom.Cpf, garçom.Telefone);
                }
           }
 
           protected override EntidadeBase ObterRegistro()
           {
-               Console.Write("Entre com o NOME: ");
-               string nome = Console.ReadLine();
+               string nome = VerificarString("Entre com o NOME: ","nome");
 
-               Console.Write("\nEntre com o CPF: ");
-               string cpf = Console.ReadLine();
+               string cpf = VerificarString("\nEntre com o CPF: ", "cpf");
 
-               Console.Write("\nEntre com o TELEFONE: ");
-               string telefone = Console.ReadLine();
+               string telefone = VerificarString("\nEntre com o TELEFONE: ", "telefone");
 
                NegocioGarçom garçom = new NegocioGarçom(nome, cpf, telefone);
 
                return garçom;
+          }
+
+          public override string VerificarString(string mensagem, string campo)
+          {
+               string value = null;
+               bool temNumeros = false;
+
+               do
+               {
+                    temNumeros = false;
+                    ImprimirMensagem(mensagem, ConsoleColor.White, 'n');
+                    value = Console.ReadLine();
+
+                    if (string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value))
+                    {
+                         ImprimirMensagem($"Campo '{campo}' obrigatório!", ConsoleColor.Red, 'n');
+                         Console.ReadLine();
+                    }
+
+                    if (campo == "nome")
+                         if (int.TryParse(value, out int vaee))
+                         {
+                              ImprimirMensagem($"\nCampo '{campo}' não deve conter números!", ConsoleColor.Red, 'n');
+                              Console.ReadLine();
+                              temNumeros = true;
+                         }
+
+               } while (string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value) || temNumeros);
+
+               return value;
           }
      }
 }

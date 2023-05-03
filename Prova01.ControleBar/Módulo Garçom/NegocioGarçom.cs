@@ -36,15 +36,8 @@ namespace Prova01.ControleBar.Módulo_Garçom
           {
                ArrayList listaErros = new ArrayList();
 
-               if (string.IsNullOrEmpty(this.nome) || string.IsNullOrWhiteSpace(this.nome))
-                    listaErros.Add("Campo nome obrigatório!");
-
-               if (string.IsNullOrEmpty(this.cpf) || string.IsNullOrWhiteSpace(this.cpf))
-                    listaErros.Add("Campo cpf obrigatório!");
-
-               if (string.IsNullOrEmpty(this.telefone) || string.IsNullOrWhiteSpace(this.telefone))
-                    listaErros.Add("Campo telefone obrigatório!");
-
+               if (nome.Length < 2)
+                    listaErros.Add("\nNome precisa ter pelo menos duas letras!");
                return listaErros;
           }
      }

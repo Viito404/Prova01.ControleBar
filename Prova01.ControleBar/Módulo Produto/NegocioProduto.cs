@@ -11,7 +11,7 @@ namespace Prova01.ControleBar.Módulo_Produto
      internal class NegocioProduto : EntidadeBase
      {
 
-          private string nomeProduto;
+          private string nomeProduto, unidadesMedida;
           private int quantidadeProduto = 0;
           private double precoProduto;
 
@@ -21,17 +21,21 @@ namespace Prova01.ControleBar.Módulo_Produto
 
           public double PrecoProduto { get { return precoProduto; } set { precoProduto = value; } }
 
-          public NegocioProduto(string nomeProduto, double precoProduto)
+          public string UnidadesMedida { get { return unidadesMedida; } set { unidadesMedida = value; } }
+
+          public NegocioProduto(string nomeProduto, double precoProduto, string unidadesMedida)
           {
                this.nomeProduto = nomeProduto;
                this.precoProduto = precoProduto;
+               this.unidadesMedida = unidadesMedida;
           }
 
-          public NegocioProduto(string nomeProduto, int quantidadeProduto, double precoProduto)
+          public NegocioProduto(string nomeProduto, int quantidadeProduto, double precoProduto, string unidadesMedida)
           {
                this.nomeProduto = nomeProduto;
                this.quantidadeProduto = quantidadeProduto;
                this.precoProduto = precoProduto;
+               this.unidadesMedida = unidadesMedida;
           }
 
           public override void AtualizarRegistros(EntidadeBase registroAtualizado)
@@ -41,15 +45,12 @@ namespace Prova01.ControleBar.Módulo_Produto
                nomeProduto = produto.NomeProduto;
                quantidadeProduto = produto.quantidadeProduto;
                precoProduto = produto.precoProduto;
+               unidadesMedida = produto.unidadesMedida;
           }
 
           public override ArrayList ValidarErros()
           {
                ArrayList listaErros = new ArrayList();
-
-               if (string.IsNullOrEmpty(this.nomeProduto) || string.IsNullOrWhiteSpace(this.nomeProduto))
-                    listaErros.Add("Campo nomeProduto obrigatório!");        
-
                return listaErros;
           }
 

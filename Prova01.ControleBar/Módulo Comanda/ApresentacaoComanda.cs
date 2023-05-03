@@ -35,15 +35,15 @@ namespace Prova01.ControleBar.Módulo_Comanda
                repositorioBase = repositorioComanda;
           }
 
-          protected override void MostrarTabela(ArrayList registros)
+          protected void MostrarContas(ArrayList registros)
           {
                Console.BackgroundColor = ConsoleColor.Blue;
                Console.ForegroundColor = ConsoleColor.White;
-               Console.WriteLine("| {0, -10} | {1, -20} | {2, -20} | {3, -20} | {4, -20} | {5, -20} |", "Id", "Descrição comanda", "Garçom", "Nº Mesa", "Produto", "Quantidade");
+               Console.WriteLine("| {0, -10} | {1, -20} | {2, -20} | {3, -20} |", "Id", "Descrição comanda", "Garçom", "Nº Mesa");
                Console.ResetColor();
                foreach (NegocioComanda comanda in registros)
                {
-                    Console.WriteLine("| {0, -10} | {1, -20} | {2, -20} | {3, -20} | {4, -20} | {5, -20} |", comanda.id, comanda.DescricaoComanda, comanda.Garçom.Nome, comanda.Mesa.NumeroMesa, comanda.Produto.NomeProduto, comanda.Produto.QuantidadeProduto);
+                    Console.WriteLine("| {0, -10} | {1, -20} | {2, -20} | {3, -20} |", comanda.id, comanda.DescricaoComanda, comanda.Garçom.Nome, comanda.Mesa.NumeroMesa);
                }
           }
 
@@ -56,6 +56,7 @@ namespace Prova01.ControleBar.Módulo_Comanda
                NegocioGarçom garçom = PegarGarçom(repositorioGarçom);
 
                NegocioComanda comanda = new NegocioComanda(descricaoComanda, mesa, garçom);
+               
                return comanda;
           }
 
@@ -89,7 +90,7 @@ namespace Prova01.ControleBar.Módulo_Comanda
                                    break;
 
                               case "2":
-                                   
+                                   RegistrarPedidos(false);
                                    break;
 
                               case "3":
@@ -106,6 +107,34 @@ namespace Prova01.ControleBar.Módulo_Comanda
                          }
                     } while (saida > 0);
                }
+          }
+
+          private bool RegistrarPedidos(bool mostrarCabecalho)
+          {
+               throw new NotImplementedException();
+               //bool visualizando = false;
+
+               //if (mostrarCabecalho)
+               //{
+               //     Console.Clear();
+               //     ImprimirMensagem($"Visualizando {nomeEntidade}{sufixo}...\n", ConsoleColor.DarkGray, 'n');
+               //     visualizando = true;
+               //}
+
+               //ArrayList registros = repositorioBase.PegarLista();
+
+               //if (registros.Count == 0)
+               //{
+               //     ImprimirMensagem("\nNenhum registro cadastrado!", ConsoleColor.DarkYellow, 's');
+               //     return false;
+               //}
+
+               //MostrarTabela(registros);
+
+               //if (visualizando)
+               //     Console.ReadLine();
+
+               //return true;
           }
 
           public void AbrirConta()
@@ -149,7 +178,7 @@ namespace Prova01.ControleBar.Módulo_Comanda
                     return false;
                }
 
-               MostrarTabela(registros);
+               MostrarContas(registros);
 
                if (visualizando)
                     Console.ReadLine();
@@ -161,6 +190,7 @@ namespace Prova01.ControleBar.Módulo_Comanda
                apresentacaoMesa.VisualizarRegistros(true);
                int id = apresentacaoMesa.EncontrarId();
                NegocioMesa mesa = repositorioMesa.ProcurarId(id);
+               mesa.disponivel = false;
                return mesa;
           }
           private NegocioProduto PegarProduto(RepositorioProduto repositorioProduto)
@@ -178,5 +208,8 @@ namespace Prova01.ControleBar.Módulo_Comanda
                return garçom;
           }
 
+          protected override void MostrarTabela(ArrayList registros)
+          {
+               throw new NotImplementedException();
+          }
      }
-}

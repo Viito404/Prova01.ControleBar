@@ -14,10 +14,11 @@ namespace Prova01.ControleBar.Módulo_Mesa
           private int numeroMesa;
           private string localizacaoMesa;
 
-          public NegocioMesa(int numeroMesa, string localizacaoMesa)
+          public NegocioMesa(int numeroMesa, string localizacaoMesa, bool disponivel)
           {
                this.numeroMesa = numeroMesa;
                this.localizacaoMesa = localizacaoMesa;
+               this.disponivel = true;
           }
 
           public int NumeroMesa { get { return numeroMesa; } set { numeroMesa = value; } }

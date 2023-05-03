@@ -12,6 +12,7 @@ namespace Prova01.ControleBar.Compartilhado
           //id universal para todos os elementos a serem cadastrados.
           public int id;
 
+          public bool disponivel;
           //método abstrato para atualizar os registros. OBS: deve-se fazer o cast na classe entidade do elemento desejado. 
           public abstract void AtualizarRegistros(EntidadeBase registroAtualizado);
 

@@ -19,5 +19,21 @@ namespace Prova01.ControleBar.Módulo_Mesa
           {
                return (NegocioMesa)base.ProcurarId(id);
           }
+
+          public bool VerificarNumero(int numero)
+          {
+               bool temNumero = false;
+
+               foreach (NegocioMesa registro in dados)
+               {
+                    if (registro.NumeroMesa == numero)
+                    {
+                         temNumero = true;
+                         break;
+                    }
+               }
+               return temNumero;
+          }
+
      }
 }

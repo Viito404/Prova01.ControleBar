@@ -15,6 +15,7 @@ namespace Prova01.ControleBar.Módulo_Produto
 
           public ApresentacaoProduto(RepositorioProduto repositorioProduto)
           {
+               pronome = "o";
                nomeEntidade = "Produto";
                sufixo = "s";
                this.repositorioProduto = repositorioProduto;
@@ -24,23 +25,24 @@ namespace Prova01.ControleBar.Módulo_Produto
           {
                Console.BackgroundColor = ConsoleColor.Blue;
                Console.ForegroundColor = ConsoleColor.White;
-               Console.WriteLine("| {0, -10} | {1, -20} | {2, -20} |", "Id", "Nome", "Preço");
+               Console.WriteLine("| {0, -10} | {1, -25} | {2, -20} | {3, -10} |", "Id", "Nome", "Unidade medida", "Preço");
                Console.ResetColor();
                foreach (NegocioProduto produto in registros)
                {
-                    Console.WriteLine("| {0, -10} | {1, -20} | {2, -20} |", produto.id, produto.NomeProduto, produto.PrecoProduto);
+                    Console.WriteLine("| {0, -10} | {1, -25} | {2, -20} | {3, -10} |", produto.id, produto.NomeProduto, produto.UnidadesMedida, produto.PrecoProduto.ToString("F2"));
                }
           }
 
           protected override EntidadeBase ObterRegistro()
           {
-               Console.Write("Entre com o NOME do produto: ");
-               string nome = Console.ReadLine();
+               string nome = VerificarString("Entre com o NOME do produto: ", "Nome");
 
-               Console.Write("\nEntre com o PREÇO do produto: ");
-               double preco = Convert.ToDouble(Console.ReadLine());
 
-               NegocioProduto produto = new NegocioProduto(nome, preco);
+               double preco = VerificarDouble("\nEntre com o PREÇO do produto: ", "Preço");
+
+               string unidadesMedida = VerificarString("\nEntre com uma UNIDADE DE MEDIDA do produto: ", "Unidade medida");
+
+               NegocioProduto produto = new NegocioProduto(nome, preco, unidadesMedida);
                return produto;
           }
      }
