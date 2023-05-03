@@ -51,12 +51,12 @@ namespace Prova01.ControleBar.Módulo_Comanda
           {
                Console.Write("Entre com a DESCRIÇÃO da comanda: ");
                string descricaoComanda = Console.ReadLine();
-             
+
                NegocioMesa mesa = PegarMesa(repositorioMesa);
                NegocioGarçom garçom = PegarGarçom(repositorioGarçom);
 
                NegocioComanda comanda = new NegocioComanda(descricaoComanda, mesa, garçom);
-               
+
                return comanda;
           }
 
@@ -94,7 +94,7 @@ namespace Prova01.ControleBar.Módulo_Comanda
                                    break;
 
                               case "3":
-                                   
+
                                    break;
 
                               case "4":
@@ -213,3 +213,4 @@ namespace Prova01.ControleBar.Módulo_Comanda
                throw new NotImplementedException();
           }
      }
+}
